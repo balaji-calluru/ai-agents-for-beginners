@@ -78,10 +78,12 @@ Sessions 5-8 are upgrades, not prerequisites.
 
 ## 4. Session 1 checklist
 
-- [ ] `python -m venv .venv` then activate it (`.venv\Scripts\activate` in PowerShell)
-- [ ] `pip install -r requirements.txt`
-- [ ] `cp .env.example .env` and fill in the Azure values (see `00-course-setup/README.md`, Steps 3-4)
-- [ ] `az login`
-- [ ] Copy `01-intro-to-ai-agents/code_samples/01-python-agent-framework.ipynb` to `my-work/labs/` and run it
+- [x] `python -m venv .venv` then activate it (`.venv\Scripts\activate` in PowerShell)
+- [ ] `pip install -r requirements.txt` (run in the background; check it finished cleanly)
+- [ ] Model provider: no Azure subscription, so use MiniMax or Novita (OpenAI-compatible).
+      Create an account, make an API key, and put it in the repo-root `.env` (git-ignored).
+      Provider selection lives in `my-work/common/llm.py`; the course's Azure `az login` steps are skipped.
+- [ ] Copy `01-intro-to-ai-agents/code_samples/01-python-agent-framework.ipynb` to `my-work/labs/`,
+      swap its `FoundryChatClient(...)` for `get_chat_client()` from `common/llm.py`, and run it
 - [ ] Skim 01, 02, 03 and 07 READMEs (15 min each)
 - [ ] Fill in `capstone/PROJECT.md`
