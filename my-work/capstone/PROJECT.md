@@ -40,3 +40,7 @@ _Add a diagram or bullet list of agents, tools and data flow._
 ## Demo script (fill in at Session 9)
 
 _3 minutes: problem, live run, one failure case and how the eval catches it._
+
+![1794418786461](image/PROJECT/1794418786461.png)
+
+![1794418838247](image/PROJECT/1794418838247.png)

@@ -50,3 +50,32 @@ def get_chat_client() -> OpenAIChatCompletionClient:
     raise RuntimeError(
         "No provider configured. Add MINIMAX_API_KEY or NOVITA_API_KEY to your .env file."
     )
+
+
+# --- Output helpers -------------------------------------------------------------------------
+# MiniMax-style reasoning models emit <think>...</think> inline, and `response_format` (structured
+# output) is not honored by these providers. These helpers make the output safe to show or parse.
+
+import re
+
+from pydantic import BaseModel
+
+_THINK_RE = re.compile(r"<think>.*?</think>", re.DOTALL)
+
+
+def strip_think(text: str) -> str:
+    """Remove <think>...</think> reasoning blocks so they never reach a customer."""
+    return _THINK_RE.sub("", str(text)).strip()
+
+
+def parse_json_response[T: BaseModel](text: str, model: type[T]) -> T:
+    """Parse a model's reply into a Pydantic model.
+
+    Use instead of `response_format`: tell the agent to "reply with JSON only" matching the
+    schema, then call this. It strips <think> blocks and takes the outermost {...} object.
+    """
+    cleaned = strip_think(text)
+    start, end = cleaned.find("{"), cleaned.rfind("}")
+    if start == -1 or end <= start:
+        raise ValueError(f"No JSON object found in model reply: {cleaned[:200]!r}")
+    return model.model_validate_json(cleaned[start : end + 1])
